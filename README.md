@@ -4,25 +4,6 @@ An end-to-end data engineering pipeline designed to automatically collect, proce
 
 ---
 
-## System Architecture
-
-The data pipeline adopts the Medallion Architecture (Bronze -> Silver -> Gold) for data quality guarantees, orchestrated by Airflow and powered by PySpark & Delta Lake.
-
-```mermaid
-graph TD
-    A[Chotot.com] -->|Python Crawler / BeautifulSoup| B[(Bronze Layer)]
-    B -->|PySpark / Data Cleaning| C[(Silver Layer)]
-    C -->|CDC / Upsert to Delta Lake| D[(Delta Lake)]
-    D -->|PySpark / Business Aggregations| E[(Gold Layer)]
-    E -->|JDBC| F[(PostgreSQL)]
-    F -->|SQL / Dashboarding| G[Metabase Visualization]
-
-    subgraph Orchestration
-    H[Apache Airflow] -. orchestrates .-> B
-    H -. orchestrates .-> C
-    H -. orchestrates .-> E
-    end
-```
 
 ### Flow Breakdown:
 1. **Crawler**: A scheduled Python script that extracts raw snapshot data recursively from Chotot listings.
